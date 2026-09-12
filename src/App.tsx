@@ -543,7 +543,7 @@ function App() {
             <summary className="panel-heading">
               <div>
                 <span className="eyebrow">MONTHLY PULSE</span>
-                <h2>Income vs. outflow</h2>
+                <h3>Income vs. outflow</h3>
               </div>
               <span className="total-pill">
                 {totals.deductions.toLocaleString()} deducted
