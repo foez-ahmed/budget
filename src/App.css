@@ -165,3 +165,11 @@ td { font-size:22px }
 	.category-summary-table td { font-size:14px }
 	.empty,.muted { font-size:15px }
 }
+
+.toast { position:fixed; right:24px; bottom:24px; z-index:10; display:flex; align-items:center; gap:9px; padding:13px 17px; border:1px solid #c7e2ce; border-radius:8px; background:#f4fff5; box-shadow:0 12px 30px rgba(38,54,45,.16); color:#356c48; font-size:13px; font-weight:700; animation:toast-in .22s ease-out }
+.toast span { display:grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--green-deep); color:#fff; font-size:12px }
+@keyframes toast-in { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:translateY(0) } }
+
+@media (max-width:560px) {
+	.toast { right:16px; bottom:16px; left:16px; justify-content:center; text-align:center; }
+}

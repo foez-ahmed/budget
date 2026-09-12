@@ -118,8 +118,15 @@ function App() {
     category: "All" as "All" | ExpenseCategory,
   });
   const [status, setStatus] = useState("");
+  const [toast, setToast] = useState("");
   const [categoryBudgets, setCategoryBudgets] = useState<CategoryBudgets>({});
   const [budgetDraft, setBudgetDraft] = useState<CategoryBudgets>({});
+
+  useEffect(() => {
+    if (!toast) return;
+    const timeout = window.setTimeout(() => setToast(""), 3200);
+    return () => window.clearTimeout(timeout);
+  }, [toast]);
 
   useEffect(() => (auth ? onAuthStateChanged(auth, setUser) : undefined), []);
   useEffect(() => {
@@ -248,6 +255,7 @@ function App() {
       return;
     }
     const calculated = calculateTotals(form.type, amount, form.category);
+    const wasEditing = Boolean(editingId);
     const data = {
       ...form,
       description: form.description.trim(),
@@ -274,7 +282,8 @@ function App() {
       }
       setForm(emptyForm);
       setEditingId(null);
-      setStatus("Transaction saved.");
+      setStatus("");
+      setToast(wasEditing ? "Transaction updated." : "Transaction recorded.");
     } catch {
       setStatus(
         "Could not save this transaction. Check your permissions and connection.",
@@ -507,6 +516,12 @@ function App() {
         {status && (
           <div className="status" role="status">
             {status}
+          </div>
+        )}
+        {toast && (
+          <div className="toast" role="status" aria-live="polite">
+            <span aria-hidden="true">✓</span>
+            {toast}
           </div>
         )}
         <div className="metrics">
