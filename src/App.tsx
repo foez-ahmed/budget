@@ -539,8 +539,8 @@ function App() {
           <Metric label="Net remaining" value={totals.remaining} tone="ink" />
         </div>
         <div className="workspace">
-          <section className="panel chart-panel">
-            <div className="panel-heading">
+          <details className="panel chart-panel">
+            <summary className="panel-heading">
               <div>
                 <span className="eyebrow">MONTHLY PULSE</span>
                 <h2>Income vs. outflow</h2>
@@ -548,7 +548,7 @@ function App() {
               <span className="total-pill">
                 {totals.deductions.toLocaleString()} deducted
               </span>
-            </div>
+            </summary>
             <div className="comparison">
               <div className="bar-group">
                 <div
@@ -749,7 +749,7 @@ function App() {
                 <p className="muted">No category totals for this month yet.</p>
               )}
             </div>
-          </section>
+          </details>
           <section className="panel form-panel">
             <div className="panel-heading">
               <div>
