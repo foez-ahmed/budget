@@ -16,10 +16,6 @@ describe('budget rules', () => {
   it('rejects fractional amounts', () => {
     expect(() => calculateTotals('Expense', 105.5, 'Food')).toThrow('whole BDT')
   })
-  it('allows negative expense amounts', () => {
-    expect(calculateTotals('Expense', -100, 'Food')).toEqual({ savings: -10, total: -110 })
-    expect(() => calculateTotals('Income', -100)).toThrow('positive whole BDT')
-  })
   it('calculates monthly totals from stored values once', () => {
     expect(monthTotals(rows, '2026-09')).toMatchObject({ income: 2000, enteredExpenses: 105, savings: 11, deductions: 116, remaining: 1884 })
   })

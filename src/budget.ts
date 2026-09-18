@@ -25,9 +25,7 @@ export type Transaction = {
 }
 
 export function calculateTotals(type: TransactionType, amount: number, category = '') {
-  if (!Number.isInteger(amount) || amount === 0 || (type === 'Income' && amount < 0)) {
-    throw new Error(type === 'Expense' ? 'Expense amount must be a non-zero whole BDT amount.' : 'Income amount must be a positive whole BDT amount.')
-  }
+  if (!Number.isInteger(amount) || amount <= 0) throw new Error('Amount must be a positive whole BDT amount.')
   const savings = type === 'Expense' && category !== 'Tax' && category !== 'Donation'
     ? Math.ceil(amount * 0.1)
     : 0

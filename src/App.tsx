@@ -237,7 +237,7 @@ function App() {
   const monthDayCount = daysInMonth(month);
   const amountPreview = form.amount
     && Number.isInteger(Number(form.amount))
-    && (form.type === "Expense" ? Number(form.amount) !== 0 : Number(form.amount) > 0)
+    && Number(form.amount) > 0
     ? calculateTotals(form.type, Number(form.amount), form.category)
     : { savings: 0, total: 0 };
 
@@ -248,12 +248,11 @@ function App() {
       !form.description.trim() ||
       !form.date ||
       !Number.isInteger(amount) ||
-      amount === 0 ||
-      (form.type === "Income" && amount < 0) ||
+      amount <= 0 ||
       (form.type === "Expense" && !form.category)
     ) {
       setStatus(
-        "Complete every required field with a valid whole BDT amount. Expenses may be negative.",
+        "Complete every required field with a positive whole BDT amount.",
       );
       return;
     }
@@ -808,7 +807,7 @@ function App() {
                   Amount (BDT)
                   <input
                     type="number"
-                    min={form.type === "Income" ? "1" : undefined}
+                    min="1"
                     step="1"
                     placeholder="0"
                     value={form.amount}
