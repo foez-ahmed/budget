@@ -25,7 +25,9 @@ export type Transaction = {
 }
 
 export function calculateTotals(type: TransactionType, amount: number, category = '') {
-  if (!Number.isInteger(amount) || amount <= 0) throw new Error('Amount must be a positive whole BDT amount.')
+  if (!Number.isInteger(amount) || amount === 0 || (type === 'Income' && amount < 0)) {
+    throw new Error(type === 'Expense' ? 'Expense amount must be a non-zero whole BDT amount.' : 'Income amount must be a positive whole BDT amount.')
+  }
   const savings = type === 'Expense' && category !== 'Tax' && category !== 'Donation'
     ? Math.ceil(amount * 0.1)
     : 0
@@ -40,6 +42,11 @@ export function monthTotals(transactions: Transaction[], month: string) {
   const savings = expenses.reduce((sum, row) => sum + row.savings, 0)
   const deductions = expenses.reduce((sum, row) => sum + row.total, 0)
   return { income, enteredExpenses, savings, deductions, remaining: income - deductions, rows }
+}
+
+export function daysInMonth(month: string) {
+  const [year, monthNumber] = month.split('-').map(Number)
+  return new Date(year, monthNumber, 0).getDate()
 }
 
 export function filterTransactions(transactions: Transaction[], filters: { from: string; to: string; type: 'All' | TransactionType; category: 'All' | ExpenseCategory }) {

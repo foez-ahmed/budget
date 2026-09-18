@@ -21,6 +21,7 @@ import {
 import { auth, db, firebaseConfigured } from "./firebase";
 import {
   calculateTotals,
+  daysInMonth,
   EXPENSE_CATEGORIES,
   filterTransactions,
   monthTotals,
@@ -233,9 +234,10 @@ function App() {
     undefined,
     { month: "long", year: "numeric" },
   );
+  const monthDayCount = daysInMonth(month);
   const amountPreview = form.amount
     && Number.isInteger(Number(form.amount))
-    && Number(form.amount) > 0
+    && (form.type === "Expense" ? Number(form.amount) !== 0 : Number(form.amount) > 0)
     ? calculateTotals(form.type, Number(form.amount), form.category)
     : { savings: 0, total: 0 };
 
@@ -246,11 +248,12 @@ function App() {
       !form.description.trim() ||
       !form.date ||
       !Number.isInteger(amount) ||
-      amount <= 0 ||
+      amount === 0 ||
+      (form.type === "Income" && amount < 0) ||
       (form.type === "Expense" && !form.category)
     ) {
       setStatus(
-        "Complete every required field with a positive whole BDT amount.",
+        "Complete every required field with a valid whole BDT amount. Expenses may be negative.",
       );
       return;
     }
@@ -805,7 +808,7 @@ function App() {
                   Amount (BDT)
                   <input
                     type="number"
-                    min="1"
+                    min={form.type === "Income" ? "1" : undefined}
                     step="1"
                     placeholder="0"
                     value={form.amount}
@@ -890,12 +893,13 @@ function App() {
                     const spent = categoryTotals[category] || 0;
                     const limit = categoryBudgets[category] || 0;
                     const percentage = Math.min(100, (spent / limit) * 100);
+                    const budgetDays = Math.round((spent / limit) * monthDayCount);
                     return (
                       <div className="quick-budget-row" key={category}>
                         <div className="quick-budget-label">
                           <span>{category}</span>
                           <strong className={spent > limit ? "over-budget" : ""}>
-                            BDT {spent.toLocaleString()} / {limit.toLocaleString()}
+                            {budgetDays}/{monthDayCount} days · BDT {spent.toLocaleString()} / {limit.toLocaleString()}
                           </strong>
                         </div>
                         <div className="quick-budget-track">
