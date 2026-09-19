@@ -172,6 +172,10 @@ function App() {
     () => filterTransactions(rows, filters),
     [rows, filters],
   );
+  const visibleTotal = useMemo(
+    () => visibleRows.reduce((sum, row) => sum + row.total, 0),
+    [visibleRows],
+  );
   const categoryTotals = useMemo(
     () =>
       totals.rows
@@ -1038,6 +1042,15 @@ function App() {
                   </tr>
                 ))}
               </tbody>
+              <tfoot>
+                <tr>
+                  <td colSpan={7} className="number total-label">Total</td>
+                  <td className="number">
+                    <strong>BDT {visibleTotal.toLocaleString()}</strong>
+                  </td>
+                  <td />
+                </tr>
+              </tfoot>
             </table>
             {!visibleRows.length && (
               <div className="empty">
