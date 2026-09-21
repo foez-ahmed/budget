@@ -254,6 +254,14 @@ function App() {
     Number(form.amount) > 0
       ? calculateTotals(form.type, Number(form.amount), form.category)
       : { savings: 0, total: 0 };
+  const selectedCategoryBudget = form.category
+    ? categoryBudgets[form.category] || 0
+    : 0;
+  const selectedCategorySpent = form.category
+    ? categoryTotals[form.category] || 0
+    : 0;
+  const availableBalance = selectedCategoryBudget - selectedCategorySpent;
+  const remainingAfterTransaction = availableBalance - amountPreview.total;
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -878,11 +886,15 @@ function App() {
                     ))}
                   </select>
                   {form.category && (
-                    <small className="category-budget-preview">
-                      Budget limit: BDT{" "}
-                      {(categoryBudgets[form.category] || 0).toLocaleString()} ·
-                      To be entered: BDT{" "}
-                      {(Number(form.amount) || 0).toLocaleString()}
+                    <small
+                      className={`category-budget-preview ${
+                        availableBalance < 0 || remainingAfterTransaction < 0
+                          ? "over-budget"
+                          : ""
+                      }`}
+                    >
+                      Available balance: BDT {availableBalance.toLocaleString()} ·
+                      After transaction: BDT {remainingAfterTransaction.toLocaleString()}
                     </small>
                   )}
                 </label>
