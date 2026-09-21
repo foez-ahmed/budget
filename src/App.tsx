@@ -262,6 +262,14 @@ function App() {
     : 0;
   const availableBalance = selectedCategoryBudget - selectedCategorySpent;
   const remainingAfterTransaction = availableBalance - amountPreview.total;
+  const availableDays = selectedCategoryBudget
+    ? Math.floor((availableBalance / selectedCategoryBudget) * monthDayCount)
+    : 0;
+  const remainingAfterTransactionDays = selectedCategoryBudget
+    ? Math.floor(
+        (remainingAfterTransaction / selectedCategoryBudget) * monthDayCount,
+      )
+    : 0;
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -893,8 +901,8 @@ function App() {
                           : ""
                       }`}
                     >
-                      Available balance: BDT {availableBalance.toLocaleString()} ·
-                      After transaction: BDT {remainingAfterTransaction.toLocaleString()}
+                      Available: BDT {availableBalance.toLocaleString()} ({availableDays} days) ·
+                      After transaction: BDT {remainingAfterTransaction.toLocaleString()} ({remainingAfterTransactionDays} days)
                     </small>
                   )}
                 </label>

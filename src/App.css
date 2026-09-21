@@ -671,9 +671,9 @@ footer {
   margin-top: 7px;
   color: var(--green-deep);
   font:
-    13px "DM Mono",
+    15px "DM Mono",
     monospace;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 .expense-pie-section {
   border-top: 1px solid var(--line);
