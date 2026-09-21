@@ -37,7 +37,16 @@ const today = (() => {
   const offset = date.getTimezoneOffset();
   return new Date(date.getTime() - offset * 60_000).toISOString().slice(0, 10);
 })();
-const PIE_COLORS = ["#397a59", "#f28f72", "#f2c875", "#78a8c7", "#b68bc4", "#82b9a4", "#d889a4", "#8f9b70"];
+const PIE_COLORS = [
+  "#397a59",
+  "#f28f72",
+  "#f2c875",
+  "#78a8c7",
+  "#b68bc4",
+  "#82b9a4",
+  "#d889a4",
+  "#8f9b70",
+];
 const previewRows: Transaction[] = [
   {
     id: "preview-1",
@@ -239,11 +248,12 @@ function App() {
     { month: "long", year: "numeric" },
   );
   const monthDayCount = daysInMonth(month);
-  const amountPreview = form.amount
-    && Number.isInteger(Number(form.amount))
-    && Number(form.amount) > 0
-    ? calculateTotals(form.type, Number(form.amount), form.category)
-    : { savings: 0, total: 0 };
+  const amountPreview =
+    form.amount &&
+    Number.isInteger(Number(form.amount)) &&
+    Number(form.amount) > 0
+      ? calculateTotals(form.type, Number(form.amount), form.category)
+      : { savings: 0, total: 0 };
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -563,7 +573,7 @@ function App() {
                     height: `${Math.max(10, Math.min(100, (totals.income / Math.max(totals.income, totals.deductions, 1)) * 100))}%`,
                   }}
                 >
-                    <span>BDT {totals.income.toLocaleString()}</span>
+                  <span>BDT {totals.income.toLocaleString()}</span>
                 </div>
                 <small>Income</small>
               </div>
@@ -574,7 +584,7 @@ function App() {
                     height: `${Math.max(10, Math.min(100, (totals.deductions / Math.max(totals.income, totals.deductions, 1)) * 100))}%`,
                   }}
                 >
-                    <span>BDT {totals.deductions.toLocaleString()}</span>
+                  <span>BDT {totals.deductions.toLocaleString()}</span>
                 </div>
                 <small>Outflow</small>
               </div>
@@ -585,7 +595,9 @@ function App() {
                     height: `${Math.max(10, Math.min(100, (Math.max(totals.remaining, 0) / Math.max(totals.income, 1)) * 100))}%`,
                   }}
                 >
-                    <span>BDT {Math.max(totals.remaining, 0).toLocaleString()}</span>
+                  <span>
+                    BDT {Math.max(totals.remaining, 0).toLocaleString()}
+                  </span>
                 </div>
                 <small>Remaining</small>
               </div>
@@ -613,11 +625,17 @@ function App() {
                   </div>
                   <div className="expense-pie-legend">
                     {pieCategories.map(([category, value], index) => {
-                      const limit = categoryBudgets[category as ExpenseCategory] || 0;
+                      const limit =
+                        categoryBudgets[category as ExpenseCategory] || 0;
                       return (
                         <div className="pie-legend-row" key={category}>
                           <span>
-                            <i style={{ background: PIE_COLORS[index % PIE_COLORS.length] }} />
+                            <i
+                              style={{
+                                background:
+                                  PIE_COLORS[index % PIE_COLORS.length],
+                              }}
+                            />
                             {category}
                           </span>
                           <strong>
@@ -668,7 +686,8 @@ function App() {
                 <span>BDT {budgetTotal.toLocaleString()} planned</span>
               </div>
               <p className="muted budget-help">
-                Set a monthly limit for any category. Limits are shared by both household accounts.
+                Set a monthly limit for any category. Limits are shared by both
+                household accounts.
               </p>
               <form className="budget-form" onSubmit={saveBudgets}>
                 {EXPENSE_CATEGORIES.map((category) => {
@@ -688,12 +707,15 @@ function App() {
                         onChange={(event) => {
                           const value = event.target.value;
                           if (value !== "" && !/^\d+$/.test(value)) {
-                            setStatus("Category budgets must be whole BDT amounts.");
+                            setStatus(
+                              "Category budgets must be whole BDT amounts.",
+                            );
                             return;
                           }
                           setBudgetDraft({
                             ...budgetDraft,
-                            [category]: value === "" ? undefined : Number(value),
+                            [category]:
+                              value === "" ? undefined : Number(value),
                           });
                         }}
                       />
@@ -703,7 +725,8 @@ function App() {
                             spent > limit ? "over-budget" : "under-budget"
                           }
                         >
-                          BDT {spent.toLocaleString()} / {limit.toLocaleString()}
+                          BDT {spent.toLocaleString()} /{" "}
+                          {limit.toLocaleString()}
                         </small>
                       )}
                     </label>
@@ -739,12 +762,26 @@ function App() {
                       {categorySummary.map((row) => (
                         <tr key={row.category}>
                           <td>{row.category}</td>
-                          <td className="number">BDT {row.entered.toLocaleString()}</td>
-                          <td className="number savings">BDT {row.savings.toLocaleString()}</td>
-                          <td className="number"><strong>BDT {row.total.toLocaleString()}</strong></td>
-                          <td className="number">{row.budget ? `BDT ${row.budget.toLocaleString()}` : "—"}</td>
-                          <td className={`number ${row.difference < 0 ? "over-budget" : "under-budget"}`}>
-                            {row.budget ? `${row.difference < 0 ? "-" : ""}BDT ${Math.abs(row.difference).toLocaleString()}` : "—"}
+                          <td className="number">
+                            BDT {row.entered.toLocaleString()}
+                          </td>
+                          <td className="number savings">
+                            BDT {row.savings.toLocaleString()}
+                          </td>
+                          <td className="number">
+                            <strong>BDT {row.total.toLocaleString()}</strong>
+                          </td>
+                          <td className="number">
+                            {row.budget
+                              ? `BDT ${row.budget.toLocaleString()}`
+                              : "—"}
+                          </td>
+                          <td
+                            className={`number ${row.difference < 0 ? "over-budget" : "under-budget"}`}
+                          >
+                            {row.budget
+                              ? `${row.difference < 0 ? "-" : ""}BDT ${Math.abs(row.difference).toLocaleString()}`
+                              : "—"}
                           </td>
                         </tr>
                       ))}
@@ -840,6 +877,14 @@ function App() {
                       <option key={category}>{category}</option>
                     ))}
                   </select>
+                  {form.category && (
+                    <small className="category-budget-preview">
+                      Budget limit: BDT{" "}
+                      {(categoryBudgets[form.category] || 0).toLocaleString()} ·
+                      To be entered: BDT{" "}
+                      {(Number(form.amount) || 0).toLocaleString()}
+                    </small>
+                  )}
                 </label>
               )}
               <label>
@@ -892,17 +937,24 @@ function App() {
               </div>
               {Object.entries(categoryBudgets).some(([, limit]) => limit) ? (
                 <div className="quick-budget-list">
-                  {EXPENSE_CATEGORIES.filter((category) => categoryBudgets[category]).map((category) => {
+                  {EXPENSE_CATEGORIES.filter(
+                    (category) => categoryBudgets[category],
+                  ).map((category) => {
                     const spent = categoryTotals[category] || 0;
                     const limit = categoryBudgets[category] || 0;
                     const percentage = Math.min(100, (spent / limit) * 100);
-                    const budgetDays = Math.round((spent / limit) * monthDayCount);
+                    const budgetDays = Math.floor(
+                      (spent / limit) * monthDayCount,
+                    );
                     return (
                       <div className="quick-budget-row" key={category}>
                         <div className="quick-budget-label">
                           <span>{category}</span>
-                          <strong className={spent > limit ? "over-budget" : ""}>
-                            {budgetDays}/{monthDayCount} days · BDT {spent.toLocaleString()} / {limit.toLocaleString()}
+                          <strong
+                            className={spent > limit ? "over-budget" : ""}
+                          >
+                            {budgetDays}/{monthDayCount} days · BDT{" "}
+                            {spent.toLocaleString()} / {limit.toLocaleString()}
                           </strong>
                         </div>
                         <div className="quick-budget-track">
@@ -916,7 +968,9 @@ function App() {
                   })}
                 </div>
               ) : (
-                <p className="muted quick-budget-empty">Set category limits below to see progress here.</p>
+                <p className="muted quick-budget-empty">
+                  Set category limits below to see progress here.
+                </p>
               )}
             </div>
           </section>
@@ -1018,7 +1072,9 @@ function App() {
                     <td>{row.category || "—"}</td>
                     <td className="description">{row.description}</td>
                     <td>{row.source}</td>
-                    <td className="number">BDT {row.amount.toLocaleString()}</td>
+                    <td className="number">
+                      BDT {row.amount.toLocaleString()}
+                    </td>
                     <td className="number savings">
                       {row.savings ? `BDT ${row.savings}` : "—"}
                     </td>
@@ -1044,7 +1100,9 @@ function App() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan={7} className="number total-label">Total</td>
+                  <td colSpan={7} className="number total-label">
+                    Total
+                  </td>
                   <td className="number">
                     <strong>BDT {visibleTotal.toLocaleString()}</strong>
                   </td>

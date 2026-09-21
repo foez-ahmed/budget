@@ -38,14 +38,14 @@ Keep the Firebase project name separate from the GitHub repository name if that 
 
 The values map to environment variables like this:
 
-| Firebase config field | Environment variable |
-| --- | --- |
-| `apiKey` | `VITE_FIREBASE_API_KEY` |
-| `authDomain` | `VITE_FIREBASE_AUTH_DOMAIN` |
-| `projectId` | `VITE_FIREBASE_PROJECT_ID` |
-| `storageBucket` | `VITE_FIREBASE_STORAGE_BUCKET` |
-| `messagingSenderId` | `VITE_FIREBASE_MESSAGING_SENDER_ID` |
-| `appId` | `VITE_FIREBASE_APP_ID` |
+| Firebase config field | Environment variable                |
+| --------------------- | ----------------------------------- |
+| `apiKey`              | `VITE_FIREBASE_API_KEY`             |
+| `authDomain`          | `VITE_FIREBASE_AUTH_DOMAIN`         |
+| `projectId`           | `VITE_FIREBASE_PROJECT_ID`          |
+| `storageBucket`       | `VITE_FIREBASE_STORAGE_BUCKET`      |
+| `messagingSenderId`   | `VITE_FIREBASE_MESSAGING_SENDER_ID` |
+| `appId`               | `VITE_FIREBASE_APP_ID`              |
 
 ### 3. Enable email and password login
 
@@ -231,31 +231,25 @@ The repository includes a GitHub Actions workflow in `.github/workflows/deploy.y
 1. Create a new **public** repository on <https://github.com/>. A public repository is compatible with the Firebase web configuration because those values are not passwords.
 2. Push this project to the repository. From the project folder, the commands are:
 
-  ```powershell
-  git init
-  git add .
-  git commit -m "Build household budget app"
-  git branch -M main
-  git remote add origin https://github.com/YOUR_GITHUB_NAME/YOUR_REPOSITORY.git
-  git push -u origin main
-  ```
+```powershell
+git init
+git add .
+git commit -m "Build household budget app"
+git branch -M main
+git remote add origin https://github.com/YOUR_GITHUB_NAME/YOUR_REPOSITORY.git
+git push -u origin main
+```
 
-  If this project is already connected to a remote repository, skip `git init` and `git remote add origin`.
-3. On GitHub, open the repository and go to **Settings -> Pages**. Under **Build and deployment**, choose **GitHub Actions** as the source.
-4. Go to **Settings -> Secrets and variables -> Actions -> Variables**. Click **New repository variable** once for each of these names and paste the matching value from `firebaseConfig`:
+If this project is already connected to a remote repository, skip `git init` and `git remote add origin`. 3. On GitHub, open the repository and go to **Settings -> Pages**. Under **Build and deployment**, choose **GitHub Actions** as the source. 4. Go to **Settings -> Secrets and variables -> Actions -> Variables**. Click **New repository variable** once for each of these names and paste the matching value from `firebaseConfig`:
 
-  - `VITE_FIREBASE_API_KEY`
-  - `VITE_FIREBASE_AUTH_DOMAIN`
-  - `VITE_FIREBASE_PROJECT_ID`
-  - `VITE_FIREBASE_STORAGE_BUCKET`
-  - `VITE_FIREBASE_MESSAGING_SENDER_ID`
-  - `VITE_FIREBASE_APP_ID`
+- `VITE_FIREBASE_API_KEY`
+- `VITE_FIREBASE_AUTH_DOMAIN`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_STORAGE_BUCKET`
+- `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- `VITE_FIREBASE_APP_ID`
 
-  These are intentionally **Variables**, not Secrets, because Firebase web configuration is expected to be visible in the browser. Do not put passwords or service-account credentials in these fields.
-5. Push a new commit to `main`, or open **Actions**, select **Deploy to GitHub Pages**, and click **Run workflow**. Wait for the workflow to finish.
-6. In **Settings -> Pages**, copy the published URL. It will usually look like `https://YOUR_GITHUB_NAME.github.io/YOUR_REPOSITORY/`.
-7. Return to Firebase **Authentication -> Settings -> Authorized domains** and add the hostname only, without `https://` or a path. For example, add `YOUR_GITHUB_NAME.github.io`. Keep `localhost` in the list for local development.
-8. Open the published GitHub Pages URL and sign in with one of the two Firebase users.
+These are intentionally **Variables**, not Secrets, because Firebase web configuration is expected to be visible in the browser. Do not put passwords or service-account credentials in these fields. 5. Push a new commit to `main`, or open **Actions**, select **Deploy to GitHub Pages**, and click **Run workflow**. Wait for the workflow to finish. 6. In **Settings -> Pages**, copy the published URL. It will usually look like `https://YOUR_GITHUB_NAME.github.io/YOUR_REPOSITORY/`. 7. Return to Firebase **Authentication -> Settings -> Authorized domains** and add the hostname only, without `https://` or a path. For example, add `YOUR_GITHUB_NAME.github.io`. Keep `localhost` in the list for local development. 8. Open the published GitHub Pages URL and sign in with one of the two Firebase users.
 
 The workflow builds with the Firebase values supplied by GitHub Actions. If the deployment shows the preview notice instead of the sign-in screen, one or more repository variables is missing or misspelled. If sign-in reports an unauthorized domain, add the exact GitHub Pages hostname to Firebase Authorized domains.
 
